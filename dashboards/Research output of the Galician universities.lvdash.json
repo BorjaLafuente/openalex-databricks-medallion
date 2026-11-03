@@ -1,0 +1,882 @@
+{
+  "datasets": [
+    {
+      "name": "a796ab8c",
+      "displayName": "output_by_year",
+      "queryLines": [
+        "   SELECT university, year, articles_reviews, conference_papers, total\r\n",
+        "   FROM workspace.openalex.gold_output_by_year"
+      ]
+    },
+    {
+      "name": "f54c6bf5",
+      "displayName": "open_access",
+      "queryLines": [
+        "SELECT university, year, pct_oa\r\n",
+        "FROM workspace.openalex.gold_open_access"
+      ]
+    },
+    {
+      "name": "8cdd4e8c",
+      "displayName": "open_access_routes",
+      "queryLines": [
+        "SELECT university, year, route, pct\r\n",
+        "FROM workspace.openalex.gold_open_access\r\n",
+        "UNPIVOT (\r\n",
+        "  pct FOR route IN (\r\n",
+        "    pct_gold    AS gold,\r\n",
+        "    pct_diamond AS diamond,\r\n",
+        "    pct_hybrid  AS hybrid,\r\n",
+        "    pct_bronze  AS bronze,\r\n",
+        "    pct_green   AS green,\r\n",
+        "    pct_closed  AS closed\r\n",
+        "  )\r\n",
+        ")"
+      ]
+    },
+    {
+      "name": "541455da",
+      "displayName": "international_collaboration",
+      "queryLines": [
+        "SELECT university, year, pct_int_art_rev\r\n",
+        "FROM workspace.openalex.gold_international_collaboration"
+      ]
+    },
+    {
+      "name": "7e627b60",
+      "displayName": "citation_impact",
+      "queryLines": [
+        "SELECT university, year, n_works, median_fwci, pct_top10\r\n",
+        "FROM workspace.openalex.gold_citation_impact"
+      ]
+    },
+    {
+      "name": "0c0bcb77",
+      "displayName": "galician_collaboration",
+      "queryLines": [
+        "SELECT uni_a || '–' || uni_b AS pair, year, n_shared\r\n",
+        "FROM workspace.openalex.gold_galician_collaboration"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "913dc8e4",
+      "displayName": "Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "articles-reviews-per-year",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a796ab8c",
+                  "fields": [
+                    {
+                      "name": "university",
+                      "expression": "`university`"
+                    },
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "sum(articles_reviews)",
+                      "expression": "SUM(`articles_reviews`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Articles and reviews per year</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year",
+                  "axis": {
+                    "title": "Year"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(articles_reviews)",
+                  "axis": {
+                    "title": "Articles and reviews"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "university",
+                  "legend": {
+                    "title": "University"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "UDC",
+                        "color": "#CD1076"
+                      },
+                      {
+                        "value": "USC",
+                        "color": "#1874CD"
+                      },
+                      {
+                        "value": "UVIGO",
+                        "color": "#006400"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "open-access-share-of-articles-and-reviews",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f54c6bf5",
+                  "fields": [
+                    {
+                      "name": "university",
+                      "expression": "`university`"
+                    },
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "avg(pct_oa)",
+                      "expression": "AVG(`pct_oa`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Open access share of articles and reviews</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year",
+                  "axis": {
+                    "title": "Year"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(pct_oa)",
+                  "axis": {
+                    "title": "Open access (%)"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "university",
+                  "legend": {
+                    "title": "University"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "UVIGO",
+                        "color": "#006400"
+                      },
+                      {
+                        "value": "USC",
+                        "color": "#1874CD"
+                      },
+                      {
+                        "value": "UDC",
+                        "color": "#CD1076"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "open-access-routes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8cdd4e8c",
+                  "fields": [
+                    {
+                      "name": "route",
+                      "expression": "`route`"
+                    },
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "pct",
+                      "expression": "`pct`"
+                    },
+                    {
+                      "name": "university",
+                      "expression": "`university`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "facet": {
+                "type": "wrap",
+                "fieldName": "university",
+                "header": {
+                  "title": "University",
+                  "hideTitle": true
+                },
+                "layout": {
+                  "column": {
+                    "type": "count",
+                    "value": 3
+                  },
+                  "row": {
+                    "type": "count",
+                    "value": 1
+                  }
+                },
+                "displayName": "University",
+                "scale": {
+                  "type": "categorical"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Open access routes</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "year",
+                  "axis": {
+                    "title": "Year"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "pct",
+                  "axis": {
+                    "title": "% of articles and reviews"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "route",
+                  "legend": {
+                    "title": "Route"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        "gold",
+                        "diamond",
+                        "hybrid",
+                        "bronze",
+                        "green",
+                        "closed"
+                      ]
+                    },
+                    "mappings": [
+                      {
+                        "value": "closed",
+                        "color": "#C9C8C3"
+                      },
+                      {
+                        "value": "green",
+                        "color": "#E87BA4"
+                      },
+                      {
+                        "value": "bronze",
+                        "color": "#EDA100"
+                      },
+                      {
+                        "value": "hybrid",
+                        "color": "#1BAF7A"
+                      },
+                      {
+                        "value": "diamond",
+                        "color": "#EB6834"
+                      },
+                      {
+                        "value": "gold",
+                        "color": "#2A78D6"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "international-collaboration",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "541455da",
+                  "fields": [
+                    {
+                      "name": "university",
+                      "expression": "`university`"
+                    },
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "avg(pct_int_art_rev)",
+                      "expression": "AVG(`pct_int_art_rev`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">International collaboration</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year",
+                  "axis": {
+                    "title": "Year"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(pct_int_art_rev)",
+                  "axis": {
+                    "title": "Internationally co-authored (%)"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "university",
+                  "legend": {
+                    "title": "University"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "UDC",
+                        "color": "#CD1076"
+                      },
+                      {
+                        "value": "USC",
+                        "color": "#1874CD"
+                      },
+                      {
+                        "value": "UVIGO",
+                        "color": "#006400"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "median-fwci",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "7e627b60",
+                  "fields": [
+                    {
+                      "name": "university",
+                      "expression": "`university`"
+                    },
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "avg(median_fwci)",
+                      "expression": "AVG(`median_fwci`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Median FWCI</span>",
+                  "fields": []
+                },
+                "description": {
+                  "value": "1 = world average. Recent years have a short citation window, so their values are provisional",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "annotations": [
+                {
+                  "type": "horizontal-line",
+                  "encodings": {
+                    "y": {
+                      "dataValue": "1",
+                      "dataType": "DOUBLE"
+                    }
+                  }
+                }
+              ],
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year",
+                  "axis": {
+                    "title": "Year"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(median_fwci)",
+                  "axis": {
+                    "title": "Median FWCI"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "university",
+                  "legend": {
+                    "title": "University"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "UDC",
+                        "color": "#CD1076"
+                      },
+                      {
+                        "value": "USC",
+                        "color": "#1874CD"
+                      },
+                      {
+                        "value": "UVIGO",
+                        "color": "#006400"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 14,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "works-shared-galician-universities",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0c0bcb77",
+                  "fields": [
+                    {
+                      "name": "pair",
+                      "expression": "`pair`"
+                    },
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "sum(n_shared)",
+                      "expression": "SUM(`n_shared`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-size: 14px;\">Works shared between Galician universities</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year",
+                  "axis": {
+                    "title": "Year"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(n_shared)",
+                  "axis": {
+                    "title": "Shared articles and reviews"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "pair",
+                  "legend": {
+                    "title": "Pair"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "UDC–USC",
+                        "color": "#4A3AA7"
+                      },
+                      {
+                        "value": "UDC–UVIGO",
+                        "color": "#EB6834"
+                      },
+                      {
+                        "value": "USC–UVIGO",
+                        "color": "#1BAF7A"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f7111174",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## <span style=\"font-size: 24px;\">Research output of the Galician universities</span>\n",
+                "\n",
+                "UDC, USC and UVIGO, 2015–2025. Articles and reviews from OpenAlex, processed with a medallion pipeline (bronze → silver → gold) in Databricks. Full counting: a shared work counts for each university.\n",
+                "\n",
+                "*Personal project based on open data. Figures are not official statistics of any of the universities.*"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 9,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "year1",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a4c4ea10a383af71a3424e93e9_year",
+                "query": {
+                  "datasetName": "a796ab8c",
+                  "fields": [
+                    {
+                      "name": "min(year)",
+                      "expression": "MIN(`year`)"
+                    },
+                    {
+                      "name": "max(year)",
+                      "expression": "MAX(`year`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a7793312da93461e1f0af413ee_year",
+                "query": {
+                  "datasetName": "f54c6bf5",
+                  "fields": [
+                    {
+                      "name": "min(year)",
+                      "expression": "MIN(`year`)"
+                    },
+                    {
+                      "name": "max(year)",
+                      "expression": "MAX(`year`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a78a4f15d2aa503d113948c2cb_year",
+                "query": {
+                  "datasetName": "8cdd4e8c",
+                  "fields": [
+                    {
+                      "name": "min(year)",
+                      "expression": "MIN(`year`)"
+                    },
+                    {
+                      "name": "max(year)",
+                      "expression": "MAX(`year`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a75fbc18498879be40a0705339_year",
+                "query": {
+                  "datasetName": "541455da",
+                  "fields": [
+                    {
+                      "name": "min(year)",
+                      "expression": "MIN(`year`)"
+                    },
+                    {
+                      "name": "max(year)",
+                      "expression": "MAX(`year`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a7a5e71eb28cc5320a5b95eeb4_year",
+                "query": {
+                  "datasetName": "7e627b60",
+                  "fields": [
+                    {
+                      "name": "min(year)",
+                      "expression": "MIN(`year`)"
+                    },
+                    {
+                      "name": "max(year)",
+                      "expression": "MAX(`year`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a7b76a13339124d4bd7b660bf2_year",
+                "query": {
+                  "datasetName": "0c0bcb77",
+                  "fields": [
+                    {
+                      "name": "min(year)",
+                      "expression": "MIN(`year`)"
+                    },
+                    {
+                      "name": "max(year)",
+                      "expression": "MAX(`year`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "selection": {
+                "defaultSelection": {
+                  "range": {
+                    "dataType": "INTEGER",
+                    "min": {
+                      "value": "2015"
+                    },
+                    "max": {
+                      "value": "2025"
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Year",
+                  "fields": []
+                }
+              },
+              "widgetType": "range-slider",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a4c4ea10a383af71a3424e93e9_year"
+                  },
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a7793312da93461e1f0af413ee_year"
+                  },
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a78a4f15d2aa503d113948c2cb_year"
+                  },
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a75fbc18498879be40a0705339_year"
+                  },
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a7a5e71eb28cc5320a5b95eeb4_year"
+                  },
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f1d6a4a8031bbea366cc991c67dd12/datasets/01f1d6a7b76a13339124d4bd7b660bf2_year"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "dac24c9d",
+      "displayName": "Global Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
